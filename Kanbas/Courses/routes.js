@@ -1,18 +1,18 @@
 import Database from "../Database/index.js";
+import * as dao from "./dao.js";
 export default function CourseRoutes(app) {
-    app.put("/api/courses/:id", (req, res) => {
-        const { id } = req.params;
-        const course = req.body;
-        Database.courses = Database.courses.map((c) =>
-            c._id === id ? { ...c, ...course } : c
-        );
-        res.sendStatus(204);
+    app.put("/api/courses/:courseId", (req, res) => {
+        const { courseId } = req.params;
+        const courseUpdates = req.body;
+        const status = dao.updateCourse(courseId, courseUpdates);
+        res.send(status);
     });
 
-    app.delete("/api/courses/:id", (req, res) => {
-        const { id } = req.params;
-        Database.courses = Database.courses.filter((c) => c._id !== id);
-        res.sendStatus(204);
+
+    app.delete("/api/courses/:courseId", (req, res) => {
+        const { courseId } = req.params;
+        const status = dao.deleteCourse(courseId);
+        res.send(status);
     });
 
     app.post("/api/courses", (req, res) => {
