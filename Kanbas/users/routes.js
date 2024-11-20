@@ -33,7 +33,11 @@ export default function UserRoutes(app) {
     app.post("/api/users/signup", signup);
 
     const signin = (req, res) => {
+        console.log("Request Body:", req.body);
         const { username, password } = req.body;
+        if (!username || !password) {
+            return res.status(400).json({ message: "Username and password are required" });
+        }
         const currentUser = dao.findUserByCredentials(username, password);
         if (currentUser) {
             req.session["currentUser"] = currentUser;
