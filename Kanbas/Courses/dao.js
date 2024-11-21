@@ -4,6 +4,7 @@ export function findAllCourses() {
 }
 export function findCoursesForEnrolledUser(userId) {
     const { courses, enrollments } = Database;
+    console.log("database courses",courses);
     const enrolledCourses = courses.filter((course) =>
         enrollments.some((enrollment) => enrollment.user === userId && enrollment.course === course._id));
     return enrolledCourses;
@@ -19,6 +20,9 @@ export function deleteCourse(courseId) {
 export function updateCourse(courseId, courseUpdates) {
     const { courses } = Database;
     const course = courses.find((course) => course._id === courseId);
+    if (!course) {
+        throw new Error(`can't find ${courseId}`);
+    }
     Object.assign(course, courseUpdates);
     return course;
 }

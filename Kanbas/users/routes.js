@@ -73,6 +73,7 @@ export default function UserRoutes(app) {
             userId = currentUser._id;
         }
         const courses = courseDao.findCoursesForEnrolledUser(userId);
+        console.log("courses for user:", courses);
         res.json(courses);
     };
     app.get("/api/users/:userId/courses", findCoursesForEnrolledUser);
