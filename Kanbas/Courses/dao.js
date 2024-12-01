@@ -1,35 +1,27 @@
 import Database from "../Database/index.js";
-export function findAllCourses() {
-    return Database.courses;
-}
+import model from "./model.js";
 export function findCoursesForEnrolledUser(userId) {
     const { courses, enrollments } = Database;
-    console.log("database courses",courses);
     const enrolledCourses = courses.filter((course) =>
         enrollments.some((enrollment) => enrollment.user === userId && enrollment.course === course._id));
+    console.log("database courses",courses);
     return enrolledCourses;
 }
 
 export function deleteCourse(courseId) {
-    const { courses, enrollments } = Database;
-    Database.courses = courses.filter((course) => course._id !== courseId);
-    Database.enrollments = enrollments.filter(
-        (enrollment) => enrollment.course !== courseId
-    );}
+    return model.deleteOne({ _id: courseId });
+}
 
 export function updateCourse(courseId, courseUpdates) {
-    const { courses } = Database;
-    const course = courses.find((course) => course._id === courseId);
-    if (!course) {
-        throw new Error(`can't find ${courseId}`);
-    }
-    Object.assign(course, courseUpdates);
-    return course;
+    return model.updateOne({ _id: courseId }, { $set: courseUpdates });
 }
+
 
 export function createCourse(course) {
-    const newCourse = { ...course, _id: Date.now().toString() };
-    Database.courses = [...Database.courses, newCourse];
-    return newCourse;
+    delete course._id;
+    return model.create(course);
 }
 
+export function findAllCourses() {
+    return model.find();
+}
