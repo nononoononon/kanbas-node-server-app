@@ -10,6 +10,9 @@ import UserRoutes from "./Kanbas/users/routes.js";
 import "dotenv/config";
 import session from "express-session";
 import EnrollRoutes from "./Kanbas/Enrollments/router.js";
+import QuizRoutes from "./Kanbas/Quizzes/route.js";
+import QuestionRoutes from "./Kanbas/Questions/route.js";
+import AttemptRoutes from "./Kanbas/Attempt/route.js";
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kanbas"
 mongoose.connect(CONNECTION_STRING);
@@ -37,6 +40,9 @@ if (process.env.NODE_ENV !== "development") {
 app.use(session(sessionOptions));
 
 app.use(express.json());
+AttemptRoutes(app);
+QuestionRoutes(app);
+QuizRoutes(app);
 UserRoutes(app);
 CourseRoutes(app);
 EnrollRoutes(app)

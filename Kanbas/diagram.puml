@@ -1,0 +1,44 @@
+@startuml
+package "Quiz Management (Faculty)" {
+    F1 : Dashboard
+    F2 : Course List
+    F3 : Quiz List
+    F4 : Create New Quiz
+    F5 : Delete Quiz
+    F6 : Publish/Unpublish Quiz
+    F7 : Edit Quiz
+    F8 : Save Quiz Details
+
+    F1 --> F2 : GET /api/courses
+    F2 --> F3 : GET /api/courses/:courseId/quizzes
+    F3 --> F4 : POST /api/courses/:courseId/quizzes
+    F3 --> F5 : DELETE /api/quizzes/:quizId
+    F3 --> F6 : POST /api/quizzes/:quizId/publish （use put) （in req.body)
+    F3 --> F7 : GET /api/quizzes/:quizId
+    F7 --> F8 : PUT /api/quizzes/:quizId
+}
+
+package "Question Management (Faculty)" {
+    F7 --> Q1 : GET /api/quizzes/:quizId/questions
+    Q1 --> Q2 : POST /api/quizzes/:quizId/questions
+    Q1 --> Q3 : PUT /api/questions/:questionId
+    Q1 --> Q4 : DELETE /api/questions/:questionId
+}
+
+package "Attempt Management (Student)" {
+    S1 : Dashboard
+    S2 : Enrolled Courses
+    S3 : Available Quizzes
+    S4 : Start Attempt
+    S5 : Submit Attempt
+    S6 : Attempt History
+    S7 : View Attempt Details
+
+    S1 --> S2 : GET /api/courses
+    S2 --> S3 : GET /api/courses/:courseId/quizzes
+    S3 --> S4 : POST /api/quizzes/:quizId/attempts
+    S4 --> S5 : POST /api/attempts/:attemptId/submit (use put)
+    S3 --> S6 : GET /api/quizzes/:quizId/attempts?studentId=:id
+    S6 --> S7 : GET /api/quizzes/:quizId/attempts/:attemptId
+}
+@enduml
